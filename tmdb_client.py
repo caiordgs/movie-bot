@@ -240,6 +240,32 @@ def get_genres() -> dict:
         print(f"Erro ao buscar gêneros: {e}")
         return {}
 
+def get_movie_videos(movie_id: int) -> dict:
+    """
+    /movie/{movie_id}/videos - retorna vídeos (trailers, teasers).
+    Retorna o JSON (dict) com a chave 'results'.
+    """
+    if not movie_id:
+        return {}
+    url = f"{BASE_URL}/movie/{movie_id}/videos"
+    params = {"language": "pt-BR"}  # pede PT-BR quando possível
+
+    try:
+        if API_KEY_V3:
+            params["api_key"] = API_KEY_V3
+            resp = requests.get(url, params=params, timeout=10)
+        else:
+            resp = requests.get(url, headers=HEADERS, params=params, timeout=10)
+
+        if resp.status_code != 200:
+            # retorna vazio para o app lidar
+            return {}
+        return resp.json()
+    except requests.RequestException:
+        return {}
+
+
+
 # ---------- utilidades de apresentação e filtro ----------
 def pretty_print_results(results: List[dict], limit: int = 5) -> None:
     """
