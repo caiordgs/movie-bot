@@ -81,6 +81,10 @@ st.markdown(
 
 # ---------------------- HELPERS ---------------------- #
 
+def precision_at_k(recommended, relevant_set, k):
+    return len(set(recommended[:k]) & set(relevant_set)) / k
+
+
 def build_genre_id_to_name_map():
     # st.session_state["genres_map"] tem nome_normalizado -> id
     gm = st.session_state.get("genres_map", {}) or {}
